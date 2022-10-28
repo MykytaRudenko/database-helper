@@ -1,4 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Data;
+using System.Linq.Expressions;
 
 namespace DatabaseHelper
 {
@@ -51,6 +53,27 @@ namespace DatabaseHelper
                 Console.WriteLine("Connection closed!");
             }
             else Console.WriteLine("Connection did not open!");
+        }
+        public DataSet GetDataSet(string command)
+        {
+            DataSet ds = new DataSet();
+            if (conn.State == ConnectionState.Open)
+            {
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(command, conn);
+                    da.Fill(ds);
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Connection closed! You can not get data set!");
+            }
+            return ds;
         }
     }
 }
